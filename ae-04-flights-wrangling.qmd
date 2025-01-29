@@ -113,7 +113,8 @@ flights |>
 #| label: longest-delay
 
 flights |>
-  select(tailnum,carrier,dep_delay)
+  select(tailnum,carrier,dep_delay)|>
+  filter(dep_delay>1300)
 ```
 
 ## Exercise 6 - `filter()`
@@ -123,7 +124,8 @@ flights |>
 ```{r}
 #| label: rdu
 
-# add code here
+flights |>
+  filter(dest == "RDU")
 ```
 
 -   Filter for all rows where the destination airport is RDU and the arrival delay is less than 0.
@@ -131,12 +133,13 @@ flights |>
 ```{r}
 #| label: rdu-ontime
 
-# add code here
+flights |>
+  filter(dest == "RDU", arr_delay < 0)
 ```
 
 -   **Your turn:** Describe what the code is doing in words.
 
-Add response here.
+Takes the flight data frame and filters flights which destinations are "RDU" or "GSO" and so arrival and departure is early (ahead of schedule/ \<0)
 
 ```{r}
 #| label: nc-early
