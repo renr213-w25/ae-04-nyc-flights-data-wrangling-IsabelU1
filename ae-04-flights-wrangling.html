@@ -717,13 +717,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Create a new dataset that only contains flights that do not have a missing departure time. Include the columns <code>year</code>, <code>month</code>, <code>day</code>, <code>dep_time</code>, <code>dep_delay</code>, and <code>dep_delay_hours</code> (the departure delay in hours). <em>Hint: Note you may need to use <code>mutate()</code> to make one or more of these variables.</em></li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(dep_time) <span class="sc">|&gt;</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(dep_delay)) <span class="sc">|&gt;</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dep_delay_hours =</span> dep_delay<span class="sc">/</span><span class="dv">60</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year,month,day,dep_time,dep_delay, dep_delay_hours)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 328,521 × 6
+# Groups:   dep_time [1,318]
+    year month   day dep_time dep_delay dep_delay_hours
+   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;     &lt;dbl&gt;           &lt;dbl&gt;
+ 1  2013     1     1      517         2          0.0333
+ 2  2013     1     1      533         4          0.0667
+ 3  2013     1     1      542         2          0.0333
+ 4  2013     1     1      544        -1         -0.0167
+ 5  2013     1     1      554        -6         -0.1   
+ 6  2013     1     1      554        -4         -0.0667
+ 7  2013     1     1      555        -5         -0.0833
+ 8  2013     1     1      557        -3         -0.05  
+ 9  2013     1     1      557        -3         -0.05  
+10  2013     1     1      558        -2         -0.0333
+# ℹ 328,511 more rows</code></pre>
+</div>
 </div>
 <ol start="2" type="1">
 <li>For each airplane (uniquely identified by <code>tailnum</code>), use a <code>group_by()</code> paired with <code>summarize()</code> to find the sample size, mean, and standard deviation of flight distances. Then include only the top 5 and bottom 5 airplanes in terms of mean distance traveled per flight in the final data frame.</li>
 </ol>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">|&gt;</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tailnum) <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_distance =</span> <span class="fu">mean</span>(distance),</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">stand_dev_distance =</span> <span class="fu">sd</span>(distance),</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">sample_size =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4,044 × 4
+   tailnum mean_distance stand_dev_distance sample_size
+   &lt;chr&gt;           &lt;dbl&gt;              &lt;dbl&gt;       &lt;int&gt;
+ 1 D942DN           854.             107.             4
+ 2 N0EGMQ           676.             200.           371
+ 3 N10156           758.             332.           153
+ 4 N102UW           536.               6.75          48
+ 5 N103US           535.               6.62          46
+ 6 N104UW           535.               6.82          47
+ 7 N10575           520.             235.           289
+ 8 N105UW           525.              65.7           45
+ 9 N107US           529.              50.8           41
+10 N108UW           534.               6.63          60
+# ℹ 4,034 more rows</code></pre>
+</div>
 </div>
 </section>
 
