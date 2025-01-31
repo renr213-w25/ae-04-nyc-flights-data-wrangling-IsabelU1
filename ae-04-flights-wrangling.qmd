@@ -176,23 +176,29 @@ flights |>
 ```{r}
 #| label: count-dest
 
-# add code here
+flights |>
+    count(dest)
 ```
 
 -   In which month was there the fewest number of flights? How many flights were there in that month?
+    -   2 (February) Month: 24951 flights
 
 ```{r}
 #| label: count-month
 
-# add code here
+flights |>
+    count(month)
 ```
 
 -   **Your turn:** On which date (month + day) was there the largest number of flights? How many flights were there on that day?
+    -   11 (November) Month, 27 day: 1014 flights
 
 ```{r}
 #| label: count-date
 
-# add code here
+flights |>
+    count(month, day) |>
+    arrange(desc(n))
 ```
 
 ## Exercise 8 - `mutate()`
@@ -202,23 +208,27 @@ flights |>
 ```{r}
 #| label: calculate-mph
 
-# add code here
+flights |>
+  mutate(
+    air_time_min = air_time / 60,
+    mph = distance / air_time_min)
 ```
 
 -   **Your turn:** First, count the number of flights each month, and then calculate the proportion of flights in each month. What proportion of flights take place in July?
+    -   0.5833...
 
 ```{r}
 #| label: months-prop
 
-# add code here
+flights |>
+    count(month) |>
+    mutate(cume_dist(month))
 ```
 
 -   Create a new variable, `rdu_bound`, which indicates whether the flight is to RDU or not. Then, for each departure airport (`origin`), calculate what proportion of flights originating from that airport are to RDU.
 
 ```{r}
 #| label: rdu-origin-prop
-
-# add code here
 ```
 
 ## Exercise 9 - `summarize()`
