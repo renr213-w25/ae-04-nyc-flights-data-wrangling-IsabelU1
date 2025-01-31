@@ -187,7 +187,8 @@ flights |>
 #| label: count-month
 
 flights |>
-    count(month)
+    count(month) |>
+    arrange(n)
 ```
 
 -   **Your turn:** On which date (month + day) was there the largest number of flights? How many flights were there on that day?
@@ -210,8 +211,9 @@ flights |>
 
 flights |>
   mutate(
-    air_time_min = air_time / 60,
-    mph = distance / air_time_min)
+    air_time_minutes = air_time / 60,
+    mph = distance / air_time_minutes) |>
+    select(air_time, air_time_minutes, distance, mph)
 ```
 
 -   **Your turn:** First, count the number of flights each month, and then calculate the proportion of flights in each month. What proportion of flights take place in July?
@@ -222,13 +224,24 @@ flights |>
 
 flights |>
     count(month) |>
-    mutate(cume_dist(month))
+    mutate(prop = n/sum(n))
 ```
 
 -   Create a new variable, `rdu_bound`, which indicates whether the flight is to RDU or not. Then, for each departure airport (`origin`), calculate what proportion of flights originating from that airport are to RDU.
 
 ```{r}
 #| label: rdu-origin-prop
+
+flights |>
+  mutate(rdu_bound = if_else(dest == "RDU","Yes","No")) |>
+  count(origin, rdu_bound)|>
+  group_by(origin) |>
+  mutate(prop = n/sum(n)) |>
+  filter(rdu_bound == "Yes")
+
+
+
+
 ```
 
 ## Exercise 9 - `summarize()`
@@ -238,7 +251,8 @@ flights |>
 ```{r}
 #| label: find-arrival-delay
 
-# add code here
+flights |>
+  summarize(mean_arr_delay =mean(arr_delay, na.rm = TRUE))
 ```
 
 ## Exercise 10 - `group_by()`
@@ -248,15 +262,20 @@ flights |>
 ```{r}
 #| label: mean-arr-delay-month
 
-# add code here
+flights |>
+  group_by(month) |>
+  summarize(mean_arr_delay =mean(arr_delay, na.rm = TRUE))
 ```
 
 -   **Your turn:** What is the median departure delay for each airports around NYC (`origin`)? Which airport has the shortest median departure delay?
+    -   LGA has shortest median departure delay of -3.
 
 ```{r}
 #| label: median-dep-dely-origin
 
-# add code here
+flights |>
+  group_by(origin) |>
+  summarize(median_dep_delay =median(dep_delay, na.rm = TRUE))
 ```
 
 # Additional Practice
